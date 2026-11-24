@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title th:text="${mail.summary().subject()}">메일</title>
+<style>
+  body { margin: 0; padding: 16px; background: #fff; color: #000;
+         font-family: sans-serif; font-size: 28px; line-height: 1.6; overflow-wrap: anywhere; }
+  .back { display: inline-block; padding: 16px 28px; margin-bottom: 16px; border: 3px solid #000;
+          border-radius: 12px; color: #000; text-decoration: none; }
+  h1 { font-size: 34px; margin: 8px 0; }
+  .meta { color: #333; margin: 0 0 20px; }
+  .read { font-size: 32px; padding: 20px 40px; width: 100%; margin-bottom: 24px;
+          background: #000; color: #fff; border: none; border-radius: 12px; }
+  #body { white-space: pre-line; }
+</style>
+</head>
+<body>
+<a class="back" th:href="@{/}">← 목록으로</a>
+<h1 th:text="${mail.summary().subject()}">제목</h1>
+<p class="meta">
+  <b th:text="${mail.summary().from()}">보낸 사람</b><br>
+  <span th:text="${mail.summary().sentDateText()}">날짜</span>
+</p>
+<button class="read" onclick="readAloud()">🔊 읽어 주기</button>
+<div id="body" th:text="${mail.body()}">본문</div>
+<script>
+  function readAloud() {
+    const text = document.getElementById('body').innerText;
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ko-KR';
+    u.rate = 0.9;                    // 조금 천천히
+    speechSynthesis.cancel();        // 이전에 읽던 것 멈추기
+    speechSynthesis.speak(u);
+  }
+</script>
+</body>
+</html>
